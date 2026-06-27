@@ -1,6 +1,11 @@
 package br.com.bamtech.grocerylist.domain.usecase
 
-interface DeleteItemUseCase {
+import br.com.bamtech.grocerylist.domain.repository.GroceryRepository
 
-    suspend fun invoke(id: Long)
+class DeleteItemUseCase(
+    private val repository: GroceryRepository
+) {
+    suspend fun invoke(id: Long) {
+        TODO("Not yet implemented")
+    }
 }
