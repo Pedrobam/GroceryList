@@ -5,11 +5,11 @@ import kotlinx.coroutines.flow.Flow
 
 interface GroceryRepository {
 
-    fun getItems(): Flow<List<GroceryItem>>
+    fun observeItems(): Flow<List<GroceryItem>>
 
     suspend fun addItem(item: GroceryItem)
 
     suspend fun deleteItem(item: GroceryItem)
 
-    suspend fun updateItem(item: GroceryItem)
+    suspend fun togglePurchased(item: GroceryItem)
 }

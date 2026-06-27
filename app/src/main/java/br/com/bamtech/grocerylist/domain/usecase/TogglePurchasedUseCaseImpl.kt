@@ -6,7 +6,7 @@ class TogglePurchasedUseCaseImpl(
     private val repository: GroceryRepository
 ) : TogglePurchasedUseCase {
 
-    override suspend fun execute() {
+    override suspend fun invoke(id: Long) {
         TODO("Not yet implemented")
     }
 }

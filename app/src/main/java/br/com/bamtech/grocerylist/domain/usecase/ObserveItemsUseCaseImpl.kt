@@ -1,12 +1,14 @@
 package br.com.bamtech.grocerylist.domain.usecase
 
+import br.com.bamtech.grocerylist.domain.model.GroceryItem
 import br.com.bamtech.grocerylist.domain.repository.GroceryRepository
+import kotlinx.coroutines.flow.Flow
 
 class ObserveItemsUseCaseImpl(
     private val repository: GroceryRepository
 ) : ObserveItemsUseCase {
 
-    override suspend fun invoke() {
-        TODO("Not yet implemented")
+    override suspend fun invoke(): Flow<List<GroceryItem>> {
+        return repository.observeItems()
     }
 }
