@@ -6,6 +6,7 @@ import br.com.bamtech.grocerylist.data.local.GroceryDao
 import br.com.bamtech.grocerylist.data.local.GroceryDatabase
 import br.com.bamtech.grocerylist.data.repository.GroceryRepositoryImpl
 import br.com.bamtech.grocerylist.domain.repository.GroceryRepository
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -30,6 +31,6 @@ object DatabaseModule {
     @Singleton
     fun provideGroceryDao(db: GroceryDatabase) = db.groceryDao
 
-    @Provides
-    fun provideGroceryRepository(dao: GroceryDao): GroceryRepository = GroceryRepositoryImpl(dao)
+    @Binds
+    fun bindsGroceryRepository(dao: GroceryDao): GroceryRepository = GroceryRepositoryImpl(dao)
 }
