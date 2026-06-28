@@ -30,6 +30,6 @@ class GroceryRepositoryImpl @Inject constructor(
     }
 
     override suspend fun togglePurchased(id: Long) {
-        dao.update(id)
+        dao.togglePurchased(id)
     }
 }

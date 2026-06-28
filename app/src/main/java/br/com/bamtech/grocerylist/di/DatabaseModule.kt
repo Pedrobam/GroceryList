@@ -2,11 +2,7 @@ package br.com.bamtech.grocerylist.di
 
 import android.app.Application
 import androidx.room.Room
-import br.com.bamtech.grocerylist.data.local.GroceryDao
 import br.com.bamtech.grocerylist.data.local.GroceryDatabase
-import br.com.bamtech.grocerylist.data.repository.GroceryRepositoryImpl
-import br.com.bamtech.grocerylist.domain.repository.GroceryRepository
-import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -29,8 +25,5 @@ object DatabaseModule {
 
     @Provides
     @Singleton
-    fun provideGroceryDao(db: GroceryDatabase) = db.groceryDao
-
-    @Binds
-    fun bindsGroceryRepository(dao: GroceryDao): GroceryRepository = GroceryRepositoryImpl(dao)
+    fun provideGroceryDao(db: GroceryDatabase) = db.groceryDao()
 }

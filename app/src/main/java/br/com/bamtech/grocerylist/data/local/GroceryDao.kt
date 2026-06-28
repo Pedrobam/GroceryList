@@ -1,11 +1,9 @@
 package br.com.bamtech.grocerylist.data.local
 
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -24,5 +22,5 @@ interface GroceryDao {
     suspend fun delete(id: Long)
 
     @Query("UPDATE grocery_items SET isPurchased = NOT isPurchased WHERE id = :id")
-    suspend fun update(id: Long)
+    suspend fun togglePurchased(id: Long)
 }

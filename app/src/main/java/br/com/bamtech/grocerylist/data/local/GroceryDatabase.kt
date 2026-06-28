@@ -10,5 +10,5 @@ import androidx.room.RoomDatabase
 )
 abstract class GroceryDatabase: RoomDatabase() {
 
-    abstract val groceryDao: GroceryDao
+    abstract fun groceryDao(): GroceryDao
 }
