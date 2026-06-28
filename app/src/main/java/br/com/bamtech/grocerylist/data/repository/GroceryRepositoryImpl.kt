@@ -26,16 +26,10 @@ class GroceryRepositoryImpl @Inject constructor(
     }
 
     override suspend fun deleteItem(id: Long) {
-        val item = dao.getItemById(id)
-        if (item != null) {
-            dao.delete(item)
-        }
+        dao.delete(id)
     }
 
     override suspend fun togglePurchased(id: Long) {
-        val item = dao.getItemById(id)
-        if (item != null) {
-            dao.update(item.copy(isPurchased = !item.isPurchased))
-        }
+        dao.update(id)
     }
 }
