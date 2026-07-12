@@ -18,6 +18,9 @@ interface GroceryDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(item: GroceryEntity)
 
+    @Query("UPDATE grocery_items SET name = :name WHERE id = :id")
+    suspend fun updateName(id: Long, name: String)
+
     @Query("DELETE FROM grocery_items WHERE id = :id")
     suspend fun delete(id: Long)
 

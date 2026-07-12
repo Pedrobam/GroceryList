@@ -9,6 +9,8 @@ interface GroceryRepository {
 
     suspend fun addItem(item: GroceryItem)
 
+    suspend fun updateItemName(id: Long, name: String)
+
     suspend fun deleteItem(id: Long)
 
     suspend fun togglePurchased(id: Long)
