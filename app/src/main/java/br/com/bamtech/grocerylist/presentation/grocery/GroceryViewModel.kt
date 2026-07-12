@@ -28,14 +28,12 @@ class GroceryViewModel @Inject constructor(
         viewModelScope.launch {
             repository.observeItems()
                 .catch { throwable ->
-                    _uiState.emit(
-                        GroceryUiState.Error(
-                            message = "Unable to load grocery items."
-                        )
+                    _uiState.value = GroceryUiState.Error(
+                        message = "Unable to load grocery items."
                     )
                 }
                 .collect { items ->
-                    _uiState.emit(GroceryUiState.Success(items))
+                    _uiState.value = GroceryUiState.Success(items)
                 }
         }
     }
@@ -48,11 +46,11 @@ class GroceryViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-            repository.addItem(GroceryItem(name = normalizedName))
+            repository.addItem(normalizedName)
         }
     }
 
-    fun updateItem(id: Long, name: String) {
+    fun updateItemName(id: Long, name: String) {
         val normalizedName = name.trim()
 
         if (normalizedName.isBlank()) {

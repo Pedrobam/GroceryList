@@ -7,7 +7,7 @@ interface GroceryRepository {
 
     fun observeItems(): Flow<List<GroceryItem>>
 
-    suspend fun addItem(item: GroceryItem)
+    suspend fun addItem(name: String)
 
     suspend fun updateItemName(id: Long, name: String)
 
