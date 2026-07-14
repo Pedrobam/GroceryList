@@ -6,7 +6,7 @@ import br.com.bamtech.grocerylist.domain.usecase.AddItemUseCase
 import br.com.bamtech.grocerylist.domain.usecase.DeleteItemUseCase
 import br.com.bamtech.grocerylist.domain.usecase.MarkItemPurchasedUseCase
 import br.com.bamtech.grocerylist.domain.usecase.ObserveItemsUseCase
-import br.com.bamtech.grocerylist.domain.usecase.UpdateItemNameUseCase
+import br.com.bamtech.grocerylist.domain.usecase.TogglePurchasedUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -19,7 +19,7 @@ import javax.inject.Inject
 class GroceryViewModel @Inject constructor(
     private val observeItemsUseCase: ObserveItemsUseCase,
     private val addItemUseCase: AddItemUseCase,
-    private val updateItemNameUseCase: UpdateItemNameUseCase,
+    private val togglePurchasedUseCase: TogglePurchasedUseCase,
     private val deleteItemUseCase: DeleteItemUseCase,
     private val markItemPurchasedUseCase: MarkItemPurchasedUseCase,
 ) : ViewModel() {
@@ -65,7 +65,7 @@ class GroceryViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-            updateItemNameUseCase(id, normalizedName)
+            togglePurchasedUseCase(id, normalizedName)
         }
     }
 
