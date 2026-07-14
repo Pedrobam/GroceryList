@@ -25,6 +25,10 @@ class GroceryRepositoryImpl @Inject constructor(
         dao.insert(item.toEntity())
     }
 
+    override suspend fun updateItemName(id: Long, name: String) {
+        dao.updateName(id, name)
+    }
+
     override suspend fun deleteItem(id: Long) {
         dao.delete(id)
     }
