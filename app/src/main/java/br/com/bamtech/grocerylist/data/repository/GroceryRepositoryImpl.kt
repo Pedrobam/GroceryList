@@ -21,8 +21,7 @@ class GroceryRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun addItem(name: String) {
-        val item = GroceryItem(name = name)
+    override suspend fun addItem(item: GroceryItem) {
         dao.insert(item.toEntity())
     }
 

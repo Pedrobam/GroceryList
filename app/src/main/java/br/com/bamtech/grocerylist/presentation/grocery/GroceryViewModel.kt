@@ -2,8 +2,11 @@ package br.com.bamtech.grocerylist.presentation.grocery
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import br.com.bamtech.grocerylist.domain.model.GroceryItem
-import br.com.bamtech.grocerylist.domain.repository.GroceryRepository
+import br.com.bamtech.grocerylist.domain.usecase.AddItemUseCase
+import br.com.bamtech.grocerylist.domain.usecase.DeleteItemUseCase
+import br.com.bamtech.grocerylist.domain.usecase.MarkItemPurchasedUseCase
+import br.com.bamtech.grocerylist.domain.usecase.ObserveItemsUseCase
+import br.com.bamtech.grocerylist.domain.usecase.UpdateItemNameUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,7 +17,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class GroceryViewModel @Inject constructor(
-    private val repository: GroceryRepository
+    private val observeItemsUseCase: ObserveItemsUseCase,
+    private val addItemUseCase: AddItemUseCase,
+    private val updateItemNameUseCase: UpdateItemNameUseCase,
+    private val deleteItemUseCase: DeleteItemUseCase,
+    private val markItemPurchasedUseCase: MarkItemPurchasedUseCase,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<GroceryUiState>(GroceryUiState.Loading)
@@ -26,7 +33,7 @@ class GroceryViewModel @Inject constructor(
 
     private fun observeItems() {
         viewModelScope.launch {
-            repository.observeItems()
+            observeItemsUseCase.invoke()
                 .catch { throwable ->
                     _uiState.value = GroceryUiState.Error(
                         message = "Unable to load grocery items."
@@ -46,7 +53,7 @@ class GroceryViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-            repository.addItem(normalizedName)
+            addItemUseCase.invoke(normalizedName)
         }
     }
 
@@ -58,19 +65,19 @@ class GroceryViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-            repository.updateItemName(id, normalizedName)
+            updateItemNameUseCase.invoke(id, normalizedName)
         }
     }
 
     fun deleteItem(id: Long) {
         viewModelScope.launch {
-            repository.deleteItem(id)
+            deleteItemUseCase.invoke(id)
         }
     }
 
     fun togglePurchased(id: Long) {
         viewModelScope.launch {
-            repository.togglePurchased(id)
+            markItemPurchasedUseCase.invoke(id)
         }
     }
 }
