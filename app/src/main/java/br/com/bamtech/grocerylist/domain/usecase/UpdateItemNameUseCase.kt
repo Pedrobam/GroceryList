@@ -7,7 +7,7 @@ class UpdateItemNameUseCase @Inject constructor(
     private val repository: GroceryRepository
 ) {
 
-    suspend fun invoke(id: Long, name: String) {
+    suspend operator fun invoke(id: Long, name: String) {
         repository.updateItemName(id, name)
     }
 }

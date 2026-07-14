@@ -8,7 +8,7 @@ class AddItemUseCase @Inject constructor(
     private val repository: GroceryRepository
 ) {
 
-    suspend fun invoke(name: String) {
+    suspend operator fun invoke(name: String) {
         val item = GroceryItem(name = name)
         repository.addItem(item)
     }

@@ -33,7 +33,7 @@ class GroceryViewModel @Inject constructor(
 
     private fun observeItems() {
         viewModelScope.launch {
-            observeItemsUseCase.invoke()
+            observeItemsUseCase()
                 .catch { throwable ->
                     _uiState.value = GroceryUiState.Error(
                         message = "Unable to load grocery items."
@@ -53,7 +53,7 @@ class GroceryViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-            addItemUseCase.invoke(normalizedName)
+            addItemUseCase(normalizedName)
         }
     }
 
@@ -65,19 +65,19 @@ class GroceryViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-            updateItemNameUseCase.invoke(id, normalizedName)
+            updateItemNameUseCase(id, normalizedName)
         }
     }
 
     fun deleteItem(id: Long) {
         viewModelScope.launch {
-            deleteItemUseCase.invoke(id)
+            deleteItemUseCase(id)
         }
     }
 
     fun togglePurchased(id: Long) {
         viewModelScope.launch {
-            markItemPurchasedUseCase.invoke(id)
+            markItemPurchasedUseCase(id)
         }
     }
 }

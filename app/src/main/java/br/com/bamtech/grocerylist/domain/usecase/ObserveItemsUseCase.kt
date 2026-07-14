@@ -9,7 +9,7 @@ class ObserveItemsUseCase @Inject constructor(
     private val repository: GroceryRepository
 ) {
 
-    suspend fun invoke(): Flow<List<GroceryItem>> {
+    operator fun invoke(): Flow<List<GroceryItem>> {
         return repository.observeItems()
     }
 }

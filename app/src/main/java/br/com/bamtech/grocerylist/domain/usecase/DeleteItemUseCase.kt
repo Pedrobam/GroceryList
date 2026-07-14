@@ -7,7 +7,7 @@ class DeleteItemUseCase @Inject constructor(
     private val repository: GroceryRepository
 ) {
 
-    suspend fun invoke(id: Long) {
+    suspend operator fun invoke(id: Long) {
         repository.deleteItem(id)
     }
 }
