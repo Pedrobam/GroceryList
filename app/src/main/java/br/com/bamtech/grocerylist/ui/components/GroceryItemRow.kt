@@ -1,6 +1,5 @@
 package br.com.bamtech.grocerylist.ui.components
 
-import android.widget.CheckBox
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Text
@@ -17,12 +16,16 @@ fun GroceryItemRow(
 ) {
 
     Row(
+        modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Text(item.name)
         Checkbox(
             checked = item.isPurchased,
-            onCheckedChange = {}
+            onCheckedChange = null
+        )
+        Text(
+            item.name,
+            modifier = Modifier.weight(1f)
         )
     }
 }
