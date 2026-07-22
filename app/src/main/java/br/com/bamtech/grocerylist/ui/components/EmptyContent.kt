@@ -11,8 +11,8 @@ fun EmptyContent(
     modifier: Modifier = Modifier
 ) {
     Text(
-        modifier = modifier,
-        text = "The list is empty."
+        text = "The list is empty.",
+        modifier = modifier
     )
 }
 
