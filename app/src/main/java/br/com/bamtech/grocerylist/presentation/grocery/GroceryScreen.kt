@@ -23,12 +23,16 @@ fun GroceryRoute(
     viewModel: GroceryViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    GroceryScreen(uiState = uiState)
+    GroceryScreen(
+        uiState = uiState,
+        onPurchaseChange = viewModel::togglePurchased
+    )
 }
 
 @Composable
 fun GroceryScreen(
     uiState: GroceryUiState,
+    onPurchaseChange: (Long) -> Unit,
     modifier: Modifier = Modifier
 ) {
 
@@ -52,7 +56,12 @@ fun GroceryScreen(
                             uiState.items,
                             key = { item -> item.id }
                         ) { item ->
-                            GroceryItemRow(item = item)
+                            GroceryItemRow(
+                                item = item,
+                                onPurchaseChange = {
+                                    onPurchaseChange(item.id)
+                                }
+                            )
                         }
                     }
                 }
@@ -76,7 +85,8 @@ private fun GroceryScreenPreview() {
                     GroceryItem(id = 2, name = "Bread", isPurchased = true),
                     GroceryItem(id = 3, name = "Eggs", isPurchased = false),
                 )
-            )
+            ),
+            onPurchaseChange = {}
         )
     }
 }
@@ -85,7 +95,10 @@ private fun GroceryScreenPreview() {
 @Composable
 private fun GroceryScreenEmptyPreview() {
     GroceryListTheme {
-        GroceryScreen(uiState = GroceryUiState.Success(items = emptyList()))
+        GroceryScreen(
+            uiState = GroceryUiState.Success(items = emptyList()),
+            onPurchaseChange = {}
+        )
     }
 }
 
@@ -93,7 +106,10 @@ private fun GroceryScreenEmptyPreview() {
 @Composable
 private fun GroceryScreenLoadingPreview() {
     GroceryListTheme {
-        GroceryScreen(uiState = GroceryUiState.Loading)
+        GroceryScreen(
+            uiState = GroceryUiState.Loading,
+            onPurchaseChange = {}
+        )
     }
 }
 
@@ -104,7 +120,8 @@ private fun GroceryScreenErrorPreview() {
         GroceryScreen(
             uiState = GroceryUiState.Error(
                 message = "Error loading grocery items."
-            )
+            ),
+            onPurchaseChange = {}
         )
     }
 }
