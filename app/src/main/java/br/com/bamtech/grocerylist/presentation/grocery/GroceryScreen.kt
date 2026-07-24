@@ -3,6 +3,7 @@ package br.com.bamtech.grocerylist.presentation.grocery
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
@@ -25,38 +26,43 @@ import br.com.bamtech.grocerylist.ui.theme.GroceryListTheme
 
 @Composable
 fun GroceryRoute(
+    modifier: Modifier = Modifier,
     viewModel: GroceryViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     GroceryScreen(
         uiState = uiState,
-        addItem = viewModel::addItem,
-        onPurchasedChange = viewModel::togglePurchased
+        onAddItem = viewModel::addItem,
+        onPurchasedChange = viewModel::togglePurchased,
+        modifier
     )
 }
 
 @Composable
 fun GroceryScreen(
     uiState: GroceryUiState,
-    addItem: (String) -> Unit,
+    onAddItem: (String) -> Unit,
     onPurchasedChange: (Long) -> Unit,
     modifier: Modifier = Modifier
 ) {
 
     var itemName by rememberSaveable { mutableStateOf("") }
 
-    Column {
+    Column(
+        modifier = modifier.fillMaxSize()
+    ) {
         AddGroceryItemInput(
             value = itemName,
             onValueChange = { itemName = it },
             onAddClick = {
-                addItem(itemName)
+                onAddItem(itemName)
                 itemName = ""
             }
         )
         Box(
-            modifier = modifier
-                .fillMaxSize(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f),
             contentAlignment = Alignment.Center
         ) {
             when (uiState) {
@@ -104,7 +110,7 @@ private fun GroceryScreenPreview() {
                     GroceryItem(id = 3, name = "Eggs", isPurchased = false),
                 )
             ),
-            addItem = {},
+            onAddItem = {},
             onPurchasedChange = {},
         )
     }
@@ -116,7 +122,7 @@ private fun GroceryScreenEmptyPreview() {
     GroceryListTheme {
         GroceryScreen(
             uiState = GroceryUiState.Success(items = emptyList()),
-            addItem = {},
+            onAddItem = {},
             onPurchasedChange = {}
         )
     }
@@ -128,7 +134,7 @@ private fun GroceryScreenLoadingPreview() {
     GroceryListTheme {
         GroceryScreen(
             uiState = GroceryUiState.Loading,
-            addItem = {},
+            onAddItem = {},
             onPurchasedChange = {}
         )
     }
@@ -142,7 +148,7 @@ private fun GroceryScreenErrorPreview() {
             uiState = GroceryUiState.Error(
                 message = "Error loading grocery items."
             ),
-            addItem = {},
+            onAddItem = {},
             onPurchasedChange = {}
         )
     }
