@@ -11,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import br.com.bamtech.grocerylist.presentation.grocery.GroceryRoute
 import br.com.bamtech.grocerylist.ui.theme.GroceryListTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -22,10 +23,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             GroceryListTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                    GroceryRoute()
                 }
             }
         }
@@ -44,6 +42,6 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 @Composable
 fun GreetingPreview() {
     GroceryListTheme {
-        Greeting("Android")
+        GroceryRoute()
     }
 }
