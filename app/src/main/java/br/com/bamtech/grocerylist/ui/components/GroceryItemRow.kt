@@ -12,6 +12,7 @@ import br.com.bamtech.grocerylist.domain.model.GroceryItem
 @Composable
 fun GroceryItemRow(
     item: GroceryItem,
+    onPurchasedChange: () -> Unit,
     modifier: Modifier = Modifier
 ) {
 
@@ -21,7 +22,7 @@ fun GroceryItemRow(
     ) {
         Checkbox(
             checked = item.isPurchased,
-            onCheckedChange = null
+            onCheckedChange = { onPurchasedChange() }
         )
         Text(
             item.name,
@@ -38,6 +39,7 @@ private fun GroceryItemRowPreview() {
             id = 1,
             name = "Bananas",
             isPurchased = true
-        )
+        ),
+        onPurchasedChange = {}
     )
 }
