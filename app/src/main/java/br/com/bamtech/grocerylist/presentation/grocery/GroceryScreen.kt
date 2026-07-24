@@ -25,14 +25,14 @@ fun GroceryRoute(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     GroceryScreen(
         uiState = uiState,
-        onPurchaseChange = viewModel::togglePurchased
+        onPurchasedChange = viewModel::togglePurchased
     )
 }
 
 @Composable
 fun GroceryScreen(
     uiState: GroceryUiState,
-    onPurchaseChange: (Long) -> Unit,
+    onPurchasedChange: (Long) -> Unit,
     modifier: Modifier = Modifier
 ) {
 
@@ -58,8 +58,8 @@ fun GroceryScreen(
                         ) { item ->
                             GroceryItemRow(
                                 item = item,
-                                onPurchaseChange = {
-                                    onPurchaseChange(item.id)
+                                onPurchasedChange = {
+                                    onPurchasedChange(item.id)
                                 }
                             )
                         }
@@ -86,7 +86,7 @@ private fun GroceryScreenPreview() {
                     GroceryItem(id = 3, name = "Eggs", isPurchased = false),
                 )
             ),
-            onPurchaseChange = {}
+            onPurchasedChange = {}
         )
     }
 }
@@ -97,7 +97,7 @@ private fun GroceryScreenEmptyPreview() {
     GroceryListTheme {
         GroceryScreen(
             uiState = GroceryUiState.Success(items = emptyList()),
-            onPurchaseChange = {}
+            onPurchasedChange = {}
         )
     }
 }
@@ -108,7 +108,7 @@ private fun GroceryScreenLoadingPreview() {
     GroceryListTheme {
         GroceryScreen(
             uiState = GroceryUiState.Loading,
-            onPurchaseChange = {}
+            onPurchasedChange = {}
         )
     }
 }
@@ -121,7 +121,7 @@ private fun GroceryScreenErrorPreview() {
             uiState = GroceryUiState.Error(
                 message = "Error loading grocery items."
             ),
-            onPurchaseChange = {}
+            onPurchasedChange = {}
         )
     }
 }
