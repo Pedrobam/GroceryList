@@ -4,10 +4,14 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -26,7 +30,6 @@ import br.com.bamtech.grocerylist.ui.theme.GroceryListTheme
 
 @Composable
 fun GroceryRoute(
-    modifier: Modifier = Modifier,
     viewModel: GroceryViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -34,10 +37,10 @@ fun GroceryRoute(
         uiState = uiState,
         onAddItem = viewModel::addItem,
         onPurchasedChange = viewModel::togglePurchased,
-        modifier
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GroceryScreen(
     uiState: GroceryUiState,
@@ -48,54 +51,68 @@ fun GroceryScreen(
 
     var itemName by rememberSaveable { mutableStateOf("") }
 
-    Column(
-        modifier = modifier.fillMaxSize()
-    ) {
-        AddGroceryItemInput(
-            value = itemName,
-            onValueChange = { itemName = it },
-            onAddClick = {
-                onAddItem(itemName)
-                itemName = ""
-            }
-        )
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f),
-            contentAlignment = Alignment.Center
-        ) {
-            when (uiState) {
-                GroceryUiState.Loading -> {
-                    CircularProgressIndicator()
+    Scaffold(
+        modifier = modifier.fillMaxSize(),
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text("Grocery List")
                 }
-                is GroceryUiState.Success -> {
-                    if (uiState.items.isEmpty()) {
-                        EmptyContent()
-                    } else {
-                        LazyColumn(
-                            modifier = Modifier.fillMaxSize()
-                        ) {
-                            items(
-                                uiState.items,
-                                key = { item -> item.id }
-                            ) { item ->
-                                GroceryItemRow(
-                                    item = item,
-                                    onPurchasedChange = {
-                                        onPurchasedChange(item.id)
-                                    }
-                                )
+            )
+        }
+    ) { paddingValues ->
+
+        Column(
+            modifier = Modifier.fillMaxSize()
+                .padding(paddingValues)
+        ) {
+            AddGroceryItemInput(
+                value = itemName,
+                onValueChange = { itemName = it },
+                onAddClick = {
+                    onAddItem(itemName)
+                    itemName = ""
+                }
+            )
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
+                contentAlignment = Alignment.Center
+            ) {
+                when (uiState) {
+                    GroceryUiState.Loading -> {
+                        CircularProgressIndicator()
+                    }
+                    is GroceryUiState.Success -> {
+                        if (uiState.items.isEmpty()) {
+                            EmptyContent()
+                        } else {
+                            LazyColumn(
+                                modifier = Modifier.fillMaxSize()
+                            ) {
+                                items(
+                                    uiState.items,
+                                    key = { item -> item.id }
+                                ) { item ->
+                                    GroceryItemRow(
+                                        item = item,
+                                        onPurchasedChange = {
+                                            onPurchasedChange(item.id)
+                                        }
+                                    )
+                                }
                             }
                         }
                     }
-                }
-                is GroceryUiState.Error -> {
-                    Text(uiState.message)
+                    is GroceryUiState.Error -> {
+                        Text(uiState.message)
+                    }
                 }
             }
         }
     }
+
 }
 
 @Preview(showBackground = true)
