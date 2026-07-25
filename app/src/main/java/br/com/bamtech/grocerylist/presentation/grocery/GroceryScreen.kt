@@ -28,7 +28,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import br.com.bamtech.grocerylist.domain.model.GroceryItem
 import br.com.bamtech.grocerylist.ui.components.AddGroceryItemDialog
-import br.com.bamtech.grocerylist.ui.components.AddGroceryItemInput
 import br.com.bamtech.grocerylist.ui.components.EmptyContent
 import br.com.bamtech.grocerylist.ui.components.GroceryItemRow
 import br.com.bamtech.grocerylist.ui.theme.GroceryListTheme
@@ -106,7 +105,6 @@ fun GroceryScreen(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(paddingValues)
                     .weight(1f),
                 contentAlignment = Alignment.Center
             ) {
