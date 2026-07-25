@@ -4,10 +4,18 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -19,14 +27,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import br.com.bamtech.grocerylist.domain.model.GroceryItem
-import br.com.bamtech.grocerylist.ui.components.AddGroceryItemInput
+import br.com.bamtech.grocerylist.ui.components.AddGroceryItemDialog
 import br.com.bamtech.grocerylist.ui.components.EmptyContent
 import br.com.bamtech.grocerylist.ui.components.GroceryItemRow
 import br.com.bamtech.grocerylist.ui.theme.GroceryListTheme
 
 @Composable
 fun GroceryRoute(
-    modifier: Modifier = Modifier,
     viewModel: GroceryViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -34,10 +41,10 @@ fun GroceryRoute(
         uiState = uiState,
         onAddItem = viewModel::addItem,
         onPurchasedChange = viewModel::togglePurchased,
-        modifier
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GroceryScreen(
     uiState: GroceryUiState,
@@ -47,55 +54,93 @@ fun GroceryScreen(
 ) {
 
     var itemName by rememberSaveable { mutableStateOf("") }
+    var showAddDialog by rememberSaveable {
+        mutableStateOf(false)
+    }
 
-    Column(
-        modifier = modifier.fillMaxSize()
-    ) {
-        AddGroceryItemInput(
+    if (showAddDialog) {
+        AddGroceryItemDialog(
             value = itemName,
             onValueChange = { itemName = it },
-            onAddClick = {
+            onConfirm = {
                 onAddItem(itemName)
                 itemName = ""
+                showAddDialog = false
+            },
+            onDismiss = {
+                itemName = ""
+                showAddDialog = false
             }
         )
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f),
-            contentAlignment = Alignment.Center
-        ) {
-            when (uiState) {
-                GroceryUiState.Loading -> {
-                    CircularProgressIndicator()
+    }
+
+    Scaffold(
+        modifier = modifier.fillMaxSize(),
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text("Grocery List")
                 }
-                is GroceryUiState.Success -> {
-                    if (uiState.items.isEmpty()) {
-                        EmptyContent()
-                    } else {
-                        LazyColumn(
-                            modifier = Modifier.fillMaxSize()
-                        ) {
-                            items(
-                                uiState.items,
-                                key = { item -> item.id }
-                            ) { item ->
-                                GroceryItemRow(
-                                    item = item,
-                                    onPurchasedChange = {
-                                        onPurchasedChange(item.id)
-                                    }
-                                )
+            )
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = {
+                    showAddDialog = true
+                }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = "Add grocery item"
+                )
+            }
+        }
+    ) { paddingValues ->
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
+                contentAlignment = Alignment.Center
+            ) {
+                when (uiState) {
+                    GroceryUiState.Loading -> {
+                        CircularProgressIndicator()
+                    }
+                    is GroceryUiState.Success -> {
+                        if (uiState.items.isEmpty()) {
+                            EmptyContent()
+                        } else {
+                            LazyColumn(
+                                modifier = Modifier.fillMaxSize()
+                            ) {
+                                items(
+                                    uiState.items,
+                                    key = { item -> item.id }
+                                ) { item ->
+                                    GroceryItemRow(
+                                        item = item,
+                                        onPurchasedChange = {
+                                            onPurchasedChange(item.id)
+                                        }
+                                    )
+                                }
                             }
                         }
                     }
-                }
-                is GroceryUiState.Error -> {
-                    Text(uiState.message)
+                    is GroceryUiState.Error -> {
+                        Text(uiState.message)
+                    }
                 }
             }
         }
     }
+
 }
 
 @Preview(showBackground = true)
