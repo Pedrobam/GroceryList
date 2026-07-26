@@ -1,7 +1,11 @@
 package br.com.bamtech.grocerylist.ui.components
 
 import androidx.compose.foundation.layout.Row
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -13,6 +17,7 @@ import br.com.bamtech.grocerylist.domain.model.GroceryItem
 fun GroceryItemRow(
     item: GroceryItem,
     onPurchasedChange: () -> Unit,
+    onDeleteClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
 
@@ -28,6 +33,14 @@ fun GroceryItemRow(
             item.name,
             modifier = Modifier.weight(1f)
         )
+        IconButton(
+            onClick = onDeleteClick
+        ) {
+            Icon(
+                imageVector = Icons.Default.Delete,
+                contentDescription = "Delete ${item.name}"
+            )
+        }
     }
 }
 
@@ -40,6 +53,7 @@ private fun GroceryItemRowPreview() {
             name = "Bananas",
             isPurchased = true
         ),
-        onPurchasedChange = {}
+        onPurchasedChange = {},
+        onDeleteClick = {}
     )
 }

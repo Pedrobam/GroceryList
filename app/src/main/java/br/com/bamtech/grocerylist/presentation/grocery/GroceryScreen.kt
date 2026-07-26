@@ -32,6 +32,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import br.com.bamtech.grocerylist.domain.model.GroceryItem
 import br.com.bamtech.grocerylist.ui.components.AddGroceryItemDialog
+import br.com.bamtech.grocerylist.ui.components.DeleteGroceryItemDialog
 import br.com.bamtech.grocerylist.ui.components.EmptyContent
 import br.com.bamtech.grocerylist.ui.components.GroceryItemRow
 import br.com.bamtech.grocerylist.ui.theme.GroceryListTheme
@@ -46,6 +47,7 @@ fun GroceryRoute(
         uiState = uiState,
         onAddItem = viewModel::addItem,
         onPurchasedChange = viewModel::togglePurchased,
+        onDeletedItem = viewModel::deleteItem
     )
 }
 
@@ -55,6 +57,7 @@ fun GroceryScreen(
     uiState: GroceryUiState,
     onAddItem: (String) -> Unit,
     onPurchasedChange: (Long) -> Unit,
+    onDeletedItem: (Long) -> Unit,
     modifier: Modifier = Modifier
 ) {
 
@@ -67,7 +70,31 @@ fun GroceryScreen(
         SnackbarHostState()
     }
 
+    var itemToDelete by remember {
+        mutableStateOf<GroceryItem?>(null)
+    }
+
     val scope = rememberCoroutineScope()
+
+    itemToDelete?.let {
+        DeleteGroceryItemDialog(
+            itemName = it.name,
+            onConfirm = {
+                val item = itemToDelete ?: return@DeleteGroceryItemDialog
+                onDeletedItem(item.id)
+                itemToDelete = null
+
+                scope.launch {
+                    snackbarHostState.showSnackbar(
+                        message = "${item.name} deleted"
+                    )
+                }
+            },
+            onDismiss = {
+                itemToDelete = null
+            }
+        )
+    }
 
     if (showAddDialog) {
         AddGroceryItemDialog(
@@ -149,6 +176,9 @@ fun GroceryScreen(
                                         item = item,
                                         onPurchasedChange = {
                                             onPurchasedChange(item.id)
+                                        },
+                                        onDeleteClick = {
+                                            itemToDelete = item
                                         }
                                     )
                                 }
@@ -179,6 +209,7 @@ private fun GroceryScreenPreview() {
             ),
             onAddItem = {},
             onPurchasedChange = {},
+            onDeletedItem = {}
         )
     }
 }
@@ -190,7 +221,8 @@ private fun GroceryScreenEmptyPreview() {
         GroceryScreen(
             uiState = GroceryUiState.Success(items = emptyList()),
             onAddItem = {},
-            onPurchasedChange = {}
+            onPurchasedChange = {},
+            onDeletedItem = {}
         )
     }
 }
@@ -202,7 +234,8 @@ private fun GroceryScreenLoadingPreview() {
         GroceryScreen(
             uiState = GroceryUiState.Loading,
             onAddItem = {},
-            onPurchasedChange = {}
+            onPurchasedChange = {},
+            onDeletedItem = {}
         )
     }
 }
@@ -216,7 +249,8 @@ private fun GroceryScreenErrorPreview() {
                 message = "Error loading grocery items."
             ),
             onAddItem = {},
-            onPurchasedChange = {}
+            onPurchasedChange = {},
+            onDeletedItem = {}
         )
     }
 }
