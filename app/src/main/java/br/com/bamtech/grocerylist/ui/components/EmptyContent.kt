@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ShoppingCart
@@ -27,19 +28,22 @@ fun EmptyContent(
 ) {
 
     Column(
-        modifier = modifier,
+        modifier = modifier
+            .padding(
+                horizontal = MaterialTheme.spacing.medium
+            ),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Center,
     ) {
         Icon(
             modifier = Modifier.size(48.dp),
             imageVector = Icons.Default.ShoppingCart,
             tint = MaterialTheme.colorScheme.primary,
-            contentDescription = null
+            contentDescription = null,
         )
         Spacer(
             modifier = Modifier.height(
-                MaterialTheme.spacing.medium
+                MaterialTheme.spacing.medium,
             )
         )
         Text(
@@ -48,14 +52,14 @@ fun EmptyContent(
         )
         Spacer(
             modifier = Modifier.height(
-                MaterialTheme.spacing.small
+                MaterialTheme.spacing.small,
             )
         )
         Text(
             text = "Tap the + button to add your first item.",
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
         )
     }
 }

@@ -13,7 +13,6 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -37,7 +36,6 @@ import br.com.bamtech.grocerylist.ui.components.DeleteGroceryItemDialog
 import br.com.bamtech.grocerylist.ui.components.EmptyContent
 import br.com.bamtech.grocerylist.ui.components.GroceryItemRow
 import br.com.bamtech.grocerylist.ui.theme.GroceryListTheme
-import br.com.bamtech.grocerylist.ui.theme.spacing
 import kotlinx.coroutines.launch
 
 @Composable
@@ -151,9 +149,6 @@ fun GroceryScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(
-                    horizontal = MaterialTheme.spacing.medium
-                )
         ) {
             Box(
                 modifier = Modifier
