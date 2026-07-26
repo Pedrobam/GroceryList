@@ -1,12 +1,19 @@
 package br.com.bamtech.grocerylist.ui.components
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SwipeToDismissBox
+import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,25 +28,65 @@ fun GroceryItemRow(
     modifier: Modifier = Modifier
 ) {
 
-    Row(
-        modifier = modifier,
-        verticalAlignment = Alignment.CenterVertically,
+    val swipeToDismissBoxState = rememberSwipeToDismissBoxState(
+        confirmValueChange = { value ->
+            if (value == SwipeToDismissBoxValue.EndToStart) {
+                onDeleteClick()
+                false
+            } else false
+        }
+    )
+
+    SwipeToDismissBox(
+        state = swipeToDismissBoxState,
+        modifier = modifier.fillMaxSize(),
+        enableDismissFromStartToEnd = false,
+        backgroundContent = {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.CenterEnd,
+            ) {
+                when (swipeToDismissBoxState.dismissDirection) {
+                    SwipeToDismissBoxValue.EndToStart -> {
+                        IconButton(
+                            onClick = onDeleteClick,
+                            colors = IconButtonDefaults.iconButtonColors(
+                                containerColor = MaterialTheme.colorScheme.errorContainer,
+                                contentColor = MaterialTheme.colorScheme.onErrorContainer,
+                            )
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Delete,
+                                contentDescription = "Delete ${item.name}",
+                            )
+                        }
+                    }
+
+                    else -> Unit
+                }
+            }
+        }
     ) {
-        Checkbox(
-            checked = item.isPurchased,
-            onCheckedChange = { onPurchasedChange() }
-        )
-        Text(
-            item.name,
-            modifier = Modifier.weight(1f)
-        )
-        IconButton(
-            onClick = onDeleteClick
+        Row(
+            modifier = modifier,
+            verticalAlignment = Alignment.CenterVertically,
         ) {
-            Icon(
-                imageVector = Icons.Default.Delete,
-                contentDescription = "Delete ${item.name}"
+            Checkbox(
+                checked = item.isPurchased,
+                onCheckedChange = { onPurchasedChange() },
             )
+            Text(
+                item.name,
+                modifier = Modifier.weight(1f),
+            )
+            IconButton(
+                onClick = onDeleteClick,
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Delete,
+                    contentDescription = "Delete ${item.name}",
+                )
+            }
         }
     }
 }
