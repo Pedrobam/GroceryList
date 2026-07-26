@@ -1,14 +1,18 @@
 package br.com.bamtech.grocerylist.ui.components
 
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SwipeToDismissBox
 import androidx.compose.material3.SwipeToDismissBoxValue
@@ -19,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import br.com.bamtech.grocerylist.domain.model.GroceryItem
+import br.com.bamtech.grocerylist.ui.theme.spacing
 
 @Composable
 fun GroceryItemRow(
@@ -28,7 +33,7 @@ fun GroceryItemRow(
     modifier: Modifier = Modifier
 ) {
 
-    val swipeToDismissBoxState = rememberSwipeToDismissBoxState(
+    val swipeState = rememberSwipeToDismissBoxState(
         confirmValueChange = { value ->
             if (value == SwipeToDismissBoxValue.EndToStart) {
                 onDeleteClick()
@@ -38,37 +43,17 @@ fun GroceryItemRow(
     )
 
     SwipeToDismissBox(
-        state = swipeToDismissBoxState,
-        modifier = modifier.fillMaxSize(),
+        state = swipeState,
+        modifier = modifier.fillMaxWidth(),
         enableDismissFromStartToEnd = false,
         backgroundContent = {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.CenterEnd,
-            ) {
-                when (swipeToDismissBoxState.dismissDirection) {
-                    SwipeToDismissBoxValue.EndToStart -> {
-                        IconButton(
-                            onClick = onDeleteClick,
-                            colors = IconButtonDefaults.iconButtonColors(
-                                containerColor = MaterialTheme.colorScheme.errorContainer,
-                                contentColor = MaterialTheme.colorScheme.onErrorContainer,
-                            )
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.Delete,
-                                contentDescription = "Delete ${item.name}",
-                            )
-                        }
-                    }
-
-                    else -> Unit
-                }
-            }
+            SwipeDeleteBackground(
+                dismissDirection = swipeState.dismissDirection,
+            )
         }
     ) {
         Row(
-            modifier = modifier,
+            modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Checkbox(
@@ -89,6 +74,53 @@ fun GroceryItemRow(
             }
         }
     }
+}
+
+@Composable
+fun SwipeDeleteBackground(
+    dismissDirection: SwipeToDismissBoxValue,
+    modifier: Modifier = Modifier
+) {
+    val showDeleteAction = dismissDirection == SwipeToDismissBoxValue.EndToStart
+
+    if (showDeleteAction) {
+        Row(
+            modifier = modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.errorContainer)
+                .padding(
+                    horizontal = MaterialTheme.spacing.medium
+                ),
+            horizontalArrangement = Arrangement.End,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Icon(
+                imageVector = Icons.Default.Delete,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onErrorContainer,
+            )
+
+            Spacer(
+                modifier = Modifier.width(
+                    MaterialTheme.spacing.small,
+                ),
+            )
+
+            Text(
+                text = "Delete",
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.onErrorContainer,
+            )
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun SwipeDeleteBackgroundPreview() {
+    SwipeDeleteBackground(
+        dismissDirection = SwipeToDismissBoxValue.EndToStart
+    )
 }
 
 @Preview(showBackground = true)
