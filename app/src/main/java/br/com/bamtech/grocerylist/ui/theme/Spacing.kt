@@ -2,6 +2,7 @@ package br.com.bamtech.grocerylist.ui.theme
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.unit.Dp
@@ -16,7 +17,7 @@ data class Spacing(
     val extraLarge: Dp,
 )
 
-internal val DefaultSpacing = Spacing(
+private val DefaultSpacing = Spacing(
     extraSmall = 4.dp,
     small = 8.dp,
     medium = 16.dp,
@@ -24,10 +25,21 @@ internal val DefaultSpacing = Spacing(
     extraLarge = 32.dp,
 )
 
-internal val LocalSpacing = staticCompositionLocalOf {
+private val LocalSpacing = staticCompositionLocalOf {
     DefaultSpacing
 }
 
 val MaterialTheme.spacing: Spacing
     @Composable
     get() = LocalSpacing.current
+
+
+@Composable
+internal fun ProvideSpacing(
+    content: @Composable () -> Unit,
+) {
+    CompositionLocalProvider(
+        LocalSpacing provides DefaultSpacing,
+        content = content,
+    )
+}
