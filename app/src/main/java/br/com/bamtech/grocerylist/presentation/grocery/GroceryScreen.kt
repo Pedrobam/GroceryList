@@ -47,7 +47,7 @@ fun GroceryRoute(
         uiState = uiState,
         onAddItem = viewModel::addItem,
         onPurchasedChange = viewModel::togglePurchased,
-        onDeletedItem = viewModel::deleteItem
+        onDeleteItem = viewModel::deleteItem
     )
 }
 
@@ -57,7 +57,7 @@ fun GroceryScreen(
     uiState: GroceryUiState,
     onAddItem: (String) -> Unit,
     onPurchasedChange: (Long) -> Unit,
-    onDeletedItem: (Long) -> Unit,
+    onDeleteItem: (Long) -> Unit,
     modifier: Modifier = Modifier
 ) {
 
@@ -76,12 +76,11 @@ fun GroceryScreen(
 
     val scope = rememberCoroutineScope()
 
-    itemToDelete?.let {
+    itemToDelete?.let { item ->
         DeleteGroceryItemDialog(
-            itemName = it.name,
+            itemName = item.name,
             onConfirm = {
-                val item = itemToDelete ?: return@DeleteGroceryItemDialog
-                onDeletedItem(item.id)
+                onDeleteItem(item.id)
                 itemToDelete = null
 
                 scope.launch {
@@ -209,7 +208,7 @@ private fun GroceryScreenPreview() {
             ),
             onAddItem = {},
             onPurchasedChange = {},
-            onDeletedItem = {}
+            onDeleteItem = {}
         )
     }
 }
@@ -222,7 +221,7 @@ private fun GroceryScreenEmptyPreview() {
             uiState = GroceryUiState.Success(items = emptyList()),
             onAddItem = {},
             onPurchasedChange = {},
-            onDeletedItem = {}
+            onDeleteItem = {}
         )
     }
 }
@@ -235,7 +234,7 @@ private fun GroceryScreenLoadingPreview() {
             uiState = GroceryUiState.Loading,
             onAddItem = {},
             onPurchasedChange = {},
-            onDeletedItem = {}
+            onDeleteItem = {}
         )
     }
 }
@@ -250,7 +249,7 @@ private fun GroceryScreenErrorPreview() {
             ),
             onAddItem = {},
             onPurchasedChange = {},
-            onDeletedItem = {}
+            onDeleteItem = {}
         )
     }
 }

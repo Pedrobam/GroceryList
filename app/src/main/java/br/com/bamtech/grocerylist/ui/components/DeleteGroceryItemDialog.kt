@@ -38,7 +38,7 @@ fun DeleteGroceryItemDialog(
             }
         },
         text = {
-            Text("Are you sure you want to delete $itemName?")
+            Text("Are you sure you want to delete \"$itemName\"?")
         }
     )
 }
