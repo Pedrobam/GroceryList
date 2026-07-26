@@ -23,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import br.com.bamtech.grocerylist.domain.model.GroceryItem
+import br.com.bamtech.grocerylist.ui.theme.GroceryListTheme
 import br.com.bamtech.grocerylist.ui.theme.spacing
 
 @Composable
@@ -77,7 +78,7 @@ fun GroceryItemRow(
 }
 
 @Composable
-fun SwipeDeleteBackground(
+private fun SwipeDeleteBackground(
     dismissDirection: SwipeToDismissBoxValue,
     modifier: Modifier = Modifier
 ) {
@@ -118,21 +119,25 @@ fun SwipeDeleteBackground(
 @Preview(showBackground = true)
 @Composable
 private fun SwipeDeleteBackgroundPreview() {
-    SwipeDeleteBackground(
-        dismissDirection = SwipeToDismissBoxValue.EndToStart
-    )
+    GroceryListTheme {
+        SwipeDeleteBackground(
+            dismissDirection = SwipeToDismissBoxValue.EndToStart
+        )
+    }
 }
 
 @Preview(showBackground = true)
 @Composable
 private fun GroceryItemRowPreview() {
-    GroceryItemRow(
-        item = GroceryItem(
-            id = 1,
-            name = "Bananas",
-            isPurchased = true
-        ),
-        onPurchasedChange = {},
-        onDeleteClick = {}
-    )
+    GroceryListTheme {
+        GroceryItemRow(
+            item = GroceryItem(
+                id = 1,
+                name = "Bananas",
+                isPurchased = true
+            ),
+            onPurchasedChange = {},
+            onDeleteClick = {}
+        )
+    }
 }
