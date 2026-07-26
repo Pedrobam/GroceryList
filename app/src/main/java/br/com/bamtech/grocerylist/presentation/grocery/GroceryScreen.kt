@@ -168,10 +168,11 @@ fun GroceryScreen(
                                 modifier = Modifier.fillMaxSize()
                             ) {
                                 items(
-                                    uiState.items,
+                                    items = uiState.items,
                                     key = { item -> item.id }
                                 ) { item ->
                                     GroceryItemRow(
+                                        modifier = Modifier.animateItem(),
                                         item = item,
                                         onPurchasedChange = {
                                             onPurchasedChange(item.id)
