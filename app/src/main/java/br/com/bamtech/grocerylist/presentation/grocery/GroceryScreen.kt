@@ -16,9 +16,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -43,8 +45,31 @@ fun GroceryRoute(
     viewModel: GroceryViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    val snackbarHostState = remember {
+        SnackbarHostState()
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.uiEvents.collect { event ->
+            when(event) {
+                is GroceryUiEvent.ShowDeleteSnackbar -> {
+                    val snackbarResult = snackbarHostState.showSnackbar(
+                        message = "${event.itemName} deleted",
+                        actionLabel = "Undo"
+                    )
+
+                    if (snackbarResult == SnackbarResult.ActionPerformed) {
+                        viewModel.undoDelete()
+                    }
+                }
+            }
+        }
+    }
+
     GroceryScreen(
         uiState = uiState,
+        snackbarHostState,
         onAddItem = viewModel::addItem,
         onPurchasedChange = viewModel::togglePurchased,
         onDeleteItem = viewModel::deleteItem
@@ -55,10 +80,11 @@ fun GroceryRoute(
 @Composable
 fun GroceryScreen(
     uiState: GroceryUiState,
+    snackbarHostState: SnackbarHostState,
     onAddItem: (String) -> Unit,
     onPurchasedChange: (Long) -> Unit,
     onDeleteItem: (GroceryItem) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
 
     var itemName by rememberSaveable { mutableStateOf("") }
@@ -66,9 +92,6 @@ fun GroceryScreen(
         mutableStateOf(false)
     }
 
-    val snackbarHostState = remember {
-        SnackbarHostState()
-    }
 
     var itemToDelete by remember {
         mutableStateOf<GroceryItem?>(null)
@@ -82,12 +105,6 @@ fun GroceryScreen(
             onConfirm = {
                 onDeleteItem(item)
                 itemToDelete = null
-
-                scope.launch {
-                    snackbarHostState.showSnackbar(
-                        message = "${item.name} deleted"
-                    )
-                }
             },
             onDismiss = {
                 itemToDelete = null
@@ -207,9 +224,10 @@ private fun GroceryScreenPreview() {
                     GroceryItem(id = 3, name = "Eggs", isPurchased = false),
                 )
             ),
+            SnackbarHostState(),
             onAddItem = {},
             onPurchasedChange = {},
-            onDeleteItem = {}
+            onDeleteItem = {},
         )
     }
 }
@@ -220,6 +238,7 @@ private fun GroceryScreenEmptyPreview() {
     GroceryListTheme {
         GroceryScreen(
             uiState = GroceryUiState.Success(items = emptyList()),
+            SnackbarHostState(),
             onAddItem = {},
             onPurchasedChange = {},
             onDeleteItem = {}
@@ -233,6 +252,7 @@ private fun GroceryScreenLoadingPreview() {
     GroceryListTheme {
         GroceryScreen(
             uiState = GroceryUiState.Loading,
+            SnackbarHostState(),
             onAddItem = {},
             onPurchasedChange = {},
             onDeleteItem = {}
@@ -248,6 +268,7 @@ private fun GroceryScreenErrorPreview() {
             uiState = GroceryUiState.Error(
                 message = "Error loading grocery items."
             ),
+            SnackbarHostState(),
             onAddItem = {},
             onPurchasedChange = {},
             onDeleteItem = {}
