@@ -14,4 +14,6 @@ interface GroceryRepository {
     suspend fun deleteItem(id: Long)
 
     suspend fun togglePurchased(id: Long)
+
+    suspend fun restoreItem(item: GroceryItem)
 }
