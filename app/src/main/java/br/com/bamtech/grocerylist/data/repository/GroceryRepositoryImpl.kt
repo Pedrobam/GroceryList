@@ -36,4 +36,8 @@ class GroceryRepositoryImpl @Inject constructor(
     override suspend fun togglePurchased(id: Long) {
         dao.togglePurchased(id)
     }
+
+    override suspend fun restoreItem(item: GroceryItem) {
+        dao.insert(item.toEntity())
+    }
 }
