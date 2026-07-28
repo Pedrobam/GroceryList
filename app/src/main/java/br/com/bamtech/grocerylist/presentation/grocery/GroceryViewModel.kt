@@ -32,8 +32,8 @@ class GroceryViewModel @Inject constructor(
     private val _uiState = MutableStateFlow<GroceryUiState>(GroceryUiState.Loading)
     val uiState: StateFlow<GroceryUiState> = _uiState.asStateFlow()
 
-    private val _uiEvent = MutableSharedFlow<GroceryUiEvent>()
-    val uiEvent = _uiEvent.asSharedFlow()
+    private val _uiEvents = MutableSharedFlow<GroceryUiEvent>()
+    val uiEvents = _uiEvents.asSharedFlow()
 
     private var lastDeletedItem: GroceryItem? = null
 
@@ -84,8 +84,8 @@ class GroceryViewModel @Inject constructor(
             deleteItemUseCase(item.id)
             lastDeletedItem = item
 
-            _uiEvent.emit(
-                GroceryUiEvent.ShowDeleteSnackBar(item.name)
+            _uiEvents.emit(
+                GroceryUiEvent.ShowDeleteSnackbar(item.name)
             )
         }
     }
