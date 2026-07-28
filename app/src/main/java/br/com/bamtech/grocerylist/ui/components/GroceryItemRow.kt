@@ -21,6 +21,10 @@ import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.tooling.preview.Preview
 import br.com.bamtech.grocerylist.domain.model.GroceryItem
 import br.com.bamtech.grocerylist.ui.theme.GroceryListTheme
@@ -60,10 +64,21 @@ fun GroceryItemRow(
             Checkbox(
                 checked = item.isPurchased,
                 onCheckedChange = { onPurchasedChange() },
+                modifier = Modifier.semantics {
+                    contentDescription = item.name
+                    stateDescription = if (item.isPurchased) {
+                        "Purchased"
+                    } else {
+                        "Not purchased"
+                    }
+                }
             )
             Text(
                 item.name,
-                modifier = Modifier.weight(1f),
+                modifier = Modifier
+                    .weight(1f)
+                    .clearAndSetSemantics {},
+                style = MaterialTheme.typography.bodyLarge,
             )
             IconButton(
                 onClick = onDeleteClick,
