@@ -50,7 +50,7 @@ fun GroceryRoute(
         SnackbarHostState()
     }
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(viewModel) {
         viewModel.uiEvents.collect { event ->
             when (event) {
                 is GroceryUiEvent.ShowDeleteSnackbar -> {
