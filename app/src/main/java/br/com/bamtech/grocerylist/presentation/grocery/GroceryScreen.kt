@@ -57,7 +57,7 @@ fun GroceryScreen(
     uiState: GroceryUiState,
     onAddItem: (String) -> Unit,
     onPurchasedChange: (Long) -> Unit,
-    onDeleteItem: (Long) -> Unit,
+    onDeleteItem: (GroceryItem) -> Unit,
     modifier: Modifier = Modifier
 ) {
 
@@ -80,7 +80,7 @@ fun GroceryScreen(
         DeleteGroceryItemDialog(
             itemName = item.name,
             onConfirm = {
-                onDeleteItem(item.id)
+                onDeleteItem(item)
                 itemToDelete = null
 
                 scope.launch {
