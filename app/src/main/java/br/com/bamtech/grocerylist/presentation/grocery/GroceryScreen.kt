@@ -52,15 +52,15 @@ fun GroceryRoute(
 
     LaunchedEffect(Unit) {
         viewModel.uiEvents.collect { event ->
-            when(event) {
+            when (event) {
                 is GroceryUiEvent.ShowDeleteSnackbar -> {
                     val snackbarResult = snackbarHostState.showSnackbar(
-                        message = "${event.itemName} deleted",
-                        actionLabel = "Undo"
+                        message = "${event.item.name} deleted",
+                        actionLabel = "Undo",
                     )
 
                     if (snackbarResult == SnackbarResult.ActionPerformed) {
-                        viewModel.undoDelete()
+                        viewModel.undoDelete(event.item)
                     }
                 }
             }
@@ -69,7 +69,7 @@ fun GroceryRoute(
 
     GroceryScreen(
         uiState = uiState,
-        snackbarHostState,
+        snackbarHostState = snackbarHostState,
         onAddItem = viewModel::addItem,
         onPurchasedChange = viewModel::togglePurchased,
         onDeleteItem = viewModel::deleteItem
@@ -91,7 +91,6 @@ fun GroceryScreen(
     var showAddDialog by rememberSaveable {
         mutableStateOf(false)
     }
-
 
     var itemToDelete by remember {
         mutableStateOf<GroceryItem?>(null)
@@ -177,6 +176,7 @@ fun GroceryScreen(
                     GroceryUiState.Loading -> {
                         CircularProgressIndicator()
                     }
+
                     is GroceryUiState.Success -> {
                         if (uiState.items.isEmpty()) {
                             EmptyContent()
@@ -202,6 +202,7 @@ fun GroceryScreen(
                             }
                         }
                     }
+
                     is GroceryUiState.Error -> {
                         Text(uiState.message)
                     }

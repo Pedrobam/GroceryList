@@ -35,8 +35,6 @@ class GroceryViewModel @Inject constructor(
     private val _uiEvents = MutableSharedFlow<GroceryUiEvent>()
     val uiEvents = _uiEvents.asSharedFlow()
 
-    private var lastDeletedItem: GroceryItem? = null
-
     init {
         observeItems()
     }
@@ -82,20 +80,16 @@ class GroceryViewModel @Inject constructor(
     fun deleteItem(item: GroceryItem) {
         viewModelScope.launch {
             deleteItemUseCase(item.id)
-            lastDeletedItem = item
 
             _uiEvents.emit(
-                GroceryUiEvent.ShowDeleteSnackbar(item.name)
+                GroceryUiEvent.ShowDeleteSnackbar(item)
             )
         }
     }
 
-    fun undoDelete() {
-        val item = lastDeletedItem ?: return
-
+    fun undoDelete(item: GroceryItem) {
         viewModelScope.launch {
             restoreItemUseCase(item)
-            lastDeletedItem = null
         }
     }
 
