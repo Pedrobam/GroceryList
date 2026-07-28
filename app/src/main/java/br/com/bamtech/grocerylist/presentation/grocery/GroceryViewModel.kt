@@ -6,7 +6,6 @@ import br.com.bamtech.grocerylist.domain.usecase.AddItemUseCase
 import br.com.bamtech.grocerylist.domain.usecase.DeleteItemUseCase
 import br.com.bamtech.grocerylist.domain.usecase.MarkItemPurchasedUseCase
 import br.com.bamtech.grocerylist.domain.usecase.ObserveItemsUseCase
-import br.com.bamtech.grocerylist.domain.usecase.RestoreItemUseCase
 import br.com.bamtech.grocerylist.domain.usecase.TogglePurchasedUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,7 +22,6 @@ class GroceryViewModel @Inject constructor(
     private val togglePurchasedUseCase: TogglePurchasedUseCase,
     private val deleteItemUseCase: DeleteItemUseCase,
     private val markItemPurchasedUseCase: MarkItemPurchasedUseCase,
-    private val restoreItemUseCase: RestoreItemUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<GroceryUiState>(GroceryUiState.Loading)
