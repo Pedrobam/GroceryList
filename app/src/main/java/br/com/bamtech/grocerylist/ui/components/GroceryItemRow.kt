@@ -71,7 +71,7 @@ fun GroceryItemRow(
                     } else {
                         "Not purchased"
                     }
-                }
+                },
             )
             Text(
                 item.name,
