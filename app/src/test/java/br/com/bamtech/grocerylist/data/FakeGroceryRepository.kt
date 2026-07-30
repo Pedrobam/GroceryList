@@ -5,7 +5,7 @@ import br.com.bamtech.grocerylist.domain.repository.GroceryRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 
-class FakeGroceryRepository: GroceryRepository {
+class FakeGroceryRepository : GroceryRepository {
 
     private val items = MutableStateFlow<List<GroceryItem>>(emptyList())
 
@@ -34,9 +34,7 @@ class FakeGroceryRepository: GroceryRepository {
     }
 
     override suspend fun deleteItem(id: Long) {
-        items.value = items.value.filter { item ->
-            item.id != id
-        }
+        items.value = items.value.filterNot { it.id == id }
     }
 
     override suspend fun togglePurchased(id: Long) {

@@ -26,8 +26,7 @@ class AddItemUseCaseTest {
         val items = repository.observeItems().first()
 
         assertEquals(1, items.size)
-        assertEquals("Milk", items.first().name)
-        assertFalse( items.first().isPurchased)
+        assertEquals("Milk", items.single().name)
+        assertFalse(items.single().isPurchased)
     }
-
 }
