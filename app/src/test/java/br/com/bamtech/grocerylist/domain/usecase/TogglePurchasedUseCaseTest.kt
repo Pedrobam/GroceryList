@@ -28,7 +28,7 @@ class TogglePurchasedUseCaseTest {
         useCase(id = 1)
 
         val items = repository.observeItems().first()
-        assertTrue("Item should be marked as purchased", items[0].isPurchased)
+        assertTrue("Item should be marked as purchased", items.first().isPurchased)
     }
 
     @Test
@@ -39,6 +39,6 @@ class TogglePurchasedUseCaseTest {
         useCase(id = 1)
 
         val items = repository.observeItems().first()
-        assertFalse("Item should be marked as not purchased", items[0].isPurchased)
+        assertFalse("Item should be marked as not purchased", items.first().isPurchased)
     }
 }

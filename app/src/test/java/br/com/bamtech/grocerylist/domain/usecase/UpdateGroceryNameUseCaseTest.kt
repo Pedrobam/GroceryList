@@ -4,29 +4,32 @@ import br.com.bamtech.grocerylist.data.FakeGroceryRepository
 import br.com.bamtech.grocerylist.domain.model.GroceryItem
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Before
 import org.junit.Test
 
 class UpdateGroceryNameUseCaseTest {
 
-    private lateinit var fakeGroceryRepository: FakeGroceryRepository
-    private lateinit var updateGroceryNameUseCase: UpdateGroceryNameUseCase
+    private lateinit var repository: FakeGroceryRepository
+    private lateinit var useCase: UpdateGroceryNameUseCase
 
     @Before
     fun setup() {
-        fakeGroceryRepository = FakeGroceryRepository()
-        updateGroceryNameUseCase = UpdateGroceryNameUseCase(fakeGroceryRepository)
+        repository = FakeGroceryRepository()
+        useCase = UpdateGroceryNameUseCase(repository)
     }
 
     @Test
     fun `invoke updates the grocery item name`(): Unit = runTest {
         val item = GroceryItem(id = 1, name = "Milk", isPurchased = false)
-        fakeGroceryRepository.addItem(item)
+        repository.addItem(item)
 
-        updateGroceryNameUseCase(item.id, "Skimmed Milk")
+        useCase(item.id, "Skimmed Milk")
 
-        val updatedItem = fakeGroceryRepository.observeItems().first().first()
-        assert(updatedItem.name == "Skimmed Milk")
-        assert(updatedItem.id == item.id)
+        val updatedItem = repository.observeItems().first().first()
+        assertEquals(updatedItem.name, "Skimmed Milk")
+        assertEquals(updatedItem.id, item.id)
+        assertFalse(updatedItem.isPurchased)
     }
 }
