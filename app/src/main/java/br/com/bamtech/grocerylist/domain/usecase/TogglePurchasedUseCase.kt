@@ -7,7 +7,7 @@ class TogglePurchasedUseCase @Inject constructor(
     private val repository: GroceryRepository
 ) {
 
-    suspend operator fun invoke(id: Long, name: String) {
-        repository.updateItemName(id, name)
+    suspend operator fun invoke(id: Long) {
+        repository.togglePurchased(id)
     }
 }
