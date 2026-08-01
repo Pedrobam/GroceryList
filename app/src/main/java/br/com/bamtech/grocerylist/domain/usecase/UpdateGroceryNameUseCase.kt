@@ -3,7 +3,7 @@ package br.com.bamtech.grocerylist.domain.usecase
 import br.com.bamtech.grocerylist.domain.repository.GroceryRepository
 import javax.inject.Inject
 
-class TogglePurchasedUseCase @Inject constructor(
+class UpdateGroceryNameUseCase @Inject constructor(
     private val repository: GroceryRepository
 ) {
 
