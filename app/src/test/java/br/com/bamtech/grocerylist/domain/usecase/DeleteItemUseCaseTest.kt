@@ -2,9 +2,9 @@ package br.com.bamtech.grocerylist.domain.usecase
 
 import br.com.bamtech.grocerylist.data.FakeGroceryRepository
 import br.com.bamtech.grocerylist.domain.model.GroceryItem
-import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 

@@ -5,9 +5,9 @@ import androidx.lifecycle.viewModelScope
 import br.com.bamtech.grocerylist.domain.model.GroceryItem
 import br.com.bamtech.grocerylist.domain.usecase.AddItemUseCase
 import br.com.bamtech.grocerylist.domain.usecase.DeleteItemUseCase
-import br.com.bamtech.grocerylist.domain.usecase.MarkItemPurchasedUseCase
 import br.com.bamtech.grocerylist.domain.usecase.ObserveItemsUseCase
 import br.com.bamtech.grocerylist.domain.usecase.RestoreItemUseCase
+import br.com.bamtech.grocerylist.domain.usecase.TogglePurchasedUseCase
 import br.com.bamtech.grocerylist.domain.usecase.UpdateGroceryNameUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -25,7 +25,7 @@ class GroceryViewModel @Inject constructor(
     private val addItemUseCase: AddItemUseCase,
     private val updateGroceryNameUseCase: UpdateGroceryNameUseCase,
     private val deleteItemUseCase: DeleteItemUseCase,
-    private val markItemPurchasedUseCase: MarkItemPurchasedUseCase,
+    private val togglePurchasedUseCase: TogglePurchasedUseCase,
     private val restoreItemUseCase: RestoreItemUseCase
 ) : ViewModel() {
 
@@ -95,7 +95,7 @@ class GroceryViewModel @Inject constructor(
 
     fun togglePurchased(id: Long) {
         viewModelScope.launch {
-            markItemPurchasedUseCase(id)
+            togglePurchasedUseCase(id)
         }
     }
 }

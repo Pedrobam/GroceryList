@@ -20,13 +20,13 @@ class RestoreItemUseCaseTest {
     }
 
     @Test
-    fun `When it is restored, Then the original ID, name, and purchased state return`() = runTest {
+    fun `invoke restores the item with its original data`() = runTest {
         val item = GroceryItem(id = 42, name = "Milk", isPurchased = true)
 
         useCase(item)
 
         val items = repository.observeItems().first()
         assertEquals(1, items.size)
-        assertEquals(item, items[0])
+        assertEquals(item, items.single())
     }
 }

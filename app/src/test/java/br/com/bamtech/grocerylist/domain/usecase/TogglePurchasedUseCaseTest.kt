@@ -4,19 +4,20 @@ import br.com.bamtech.grocerylist.data.FakeGroceryRepository
 import br.com.bamtech.grocerylist.domain.model.GroceryItem
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
-class MarkItemPurchasedUseCaseTest {
+class TogglePurchasedUseCaseTest {
 
     private lateinit var repository: FakeGroceryRepository
-    private lateinit var useCase: MarkItemPurchasedUseCase
+    private lateinit var useCase: TogglePurchasedUseCase
 
     @Before
     fun setup() {
         repository = FakeGroceryRepository()
-        useCase = MarkItemPurchasedUseCase(repository)
+        useCase = TogglePurchasedUseCase(repository)
     }
 
     @Test
@@ -27,7 +28,7 @@ class MarkItemPurchasedUseCaseTest {
         useCase(id = 1)
 
         val items = repository.observeItems().first()
-        Assert.assertTrue("Item should be marked as purchased", items[0].isPurchased)
+        assertTrue("Item should be marked as purchased", items[0].isPurchased)
     }
 
     @Test
@@ -38,6 +39,6 @@ class MarkItemPurchasedUseCaseTest {
         useCase(id = 1)
 
         val items = repository.observeItems().first()
-        Assert.assertFalse("Item should be marked as not purchased", items[0].isPurchased)
+        assertFalse("Item should be marked as not purchased", items[0].isPurchased)
     }
 }
